@@ -12,10 +12,10 @@ export default function MenuBar() {
       {/** Desktop Menu */}
       <nav
         aria-label="Navigation menu for the main sections of the site"
-        className="mx-auto flex max-w-7xl items-center justify-between p-3 lg:px-8"
+        className="mx-auto flex max-w-6xl items-center justify-between p-3 lg:px-4"
       >
         <div className="flex lg:flex-1">
-          <a href="/" className="-m-1.5 p-1.5">
+          <a href="/" className="-m-1 p-1">
             <span className="sr-only">Starwars Films & Characters</span>
             <Image
               className="h-14 w-auto"
