@@ -30,7 +30,13 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MenuBar />
-        {children}
+        <div className="min-h-full">
+          <main>
+            <div className="max-w-full px-4 py-2 sm:px-6 lg:px-2 bg-black">
+              {children}
+            </div>
+          </main>
+        </div>
       </body>
     </html>
   );
