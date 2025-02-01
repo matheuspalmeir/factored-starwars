@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "../ui/globals.css";
 
 import MenuBar from "../ui/components/MenuBar";
+import DarkLayout from "../ui/components/DarkLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,13 +31,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <MenuBar />
-        <div className="min-h-full">
-          <main>
-            <div className="max-w-full px-4 py-2 sm:px-6 lg:px-2 bg-black">
-              {children}
-            </div>
-          </main>
-        </div>
+        <DarkLayout>{children}</DarkLayout>
       </body>
     </html>
   );
