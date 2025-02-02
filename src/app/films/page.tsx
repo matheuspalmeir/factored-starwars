@@ -1,8 +1,8 @@
+import { PaperClipIcon } from "@heroicons/react/24/outline";
+
 const Films = () => {
   return (
-    <div>
-      <h1>Films</h1>
-    </div>
+    <div className="min-h-screen mx-auto max-w-7xl p-4 sm:px-6 lg:px-8"></div>
   );
 };
 
