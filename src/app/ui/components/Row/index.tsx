@@ -2,7 +2,7 @@ import { formatDate } from "@/components/app/lib/utils";
 
 interface RowProps {
   title: string;
-  data: string | number | Date;
+  data: string | number | Date | undefined;
 }
 
 const Row = ({ title, data }: RowProps) => {

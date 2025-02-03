@@ -1,7 +1,7 @@
 import { FilmsResponse } from "../lib/types";
 import { parseApiData } from "../lib/utils";
-import FilmsList from "../ui/components/FilmsList";
-import { Film, FilmsData } from "../ui/components/FilmsList/types";
+import FilmsSection from "../ui/components/Films";
+import { Film, FilmsData } from "../ui/components/Films/types";
 
 const parseFilmsData = (films: FilmsResponse): FilmsData => {
   const data = films.result.map((film) =>
@@ -20,7 +20,7 @@ export default async function Films() {
 
   return (
     <div className="min-h-screen mx-auto max-w-7xl p-4 sm:px-6 lg:px-8">
-      <FilmsList data={initialdata} />
+      <FilmsSection data={initialdata} />
     </div>
   );
 }

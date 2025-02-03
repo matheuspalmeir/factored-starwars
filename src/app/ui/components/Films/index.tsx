@@ -16,9 +16,7 @@ interface FilmListProps {
   data: FilmsData;
 }
 
-const ITEMS_PER_PAGE = 2;
-
-const FilmsList = ({ data }: FilmListProps) => {
+const Films = ({ data }: FilmListProps) => {
   const {
     currentPage,
     setCurrentPage,
@@ -28,7 +26,7 @@ const FilmsList = ({ data }: FilmListProps) => {
     setTotalPages,
   } = usePagination({
     data,
-    itemsPerPage: ITEMS_PER_PAGE,
+    itemsPerPage: 2,
   });
 
   const [displayedFilms, setDisplayedFilms] = useState<FilmsData>([]);
@@ -138,4 +136,4 @@ const FilmsList = ({ data }: FilmListProps) => {
     </>
   );
 };
-export default FilmsList;
+export default Films;

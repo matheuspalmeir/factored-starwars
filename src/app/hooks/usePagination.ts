@@ -5,7 +5,7 @@ interface UsePaginationProps<T> {
   itemsPerPage: number;
   initialPage?: number;
   isDynamic?: boolean;
-  totalRecords?: number;
+  records?: number;
 }
 
 export function usePagination<T>({
@@ -13,9 +13,10 @@ export function usePagination<T>({
   itemsPerPage,
   initialPage = 1,
   isDynamic = false,
-  totalRecords = 0,
+  records = 0,
 }: UsePaginationProps<T>) {
   const [currentPage, setCurrentPage] = useState(initialPage);
+  const [totalRecords, setTotalRecords] = useState(records);
   const [pageData, setPageData] = useState<T[]>(data);
   const [totalPages, setTotalPages] = useState(0);
 
@@ -36,7 +37,7 @@ export function usePagination<T>({
 
   useEffect(() => {
     setTotalPages(countTotalPages());
-  }, [pageData]);
+  }, [pageData, totalRecords, itemsPerPage, isDynamic]);
 
   return {
     currentPage,
@@ -46,5 +47,6 @@ export function usePagination<T>({
     countTotalPages,
     paginateData,
     setTotalPages,
+    setTotalRecords,
   };
 }

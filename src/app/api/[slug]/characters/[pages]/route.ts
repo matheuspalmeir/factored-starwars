@@ -4,15 +4,16 @@ export async function GET(
 ) {
   const { params } = await context;
   const { searchParams } = new URL(request.url);
-  const name = searchParams.get("name");
+  const page = searchParams.get("page") || "1";
+  const limit = searchParams.get("limit") || "10";
 
   if (params.slug !== "swapi") {
     return new Response("Not Found", { status: 404 });
   }
 
-  console.log("[get] - name", name?.replace(" ", "+"));
-  const parsed = name?.replace(" ", "+");
-  const data = await fetch(`https://www.swapi.tech/api/people?name=${parsed}`);
+  const data = await fetch(
+    `https://www.swapi.tech/api/people?page=${page}&limit=${limit}`
+  );
 
   const dataJson = await data.json();
   return Response.json(dataJson);
