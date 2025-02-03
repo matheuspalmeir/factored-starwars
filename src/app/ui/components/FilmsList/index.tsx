@@ -10,6 +10,7 @@ import { Film, FilmsData } from "./types";
 
 import { formatKey, formatToSlug } from "@/components/app/lib/utils";
 import { useSearchParams } from "next/navigation";
+import { usePagination } from "@/components/app/hooks/usePagination";
 
 interface FilmListProps {
   data: FilmsData;
@@ -32,19 +33,19 @@ const FilmListRows = (film: Film) => {
 const ITEMS_PER_PAGE = 2;
 
 const FilmsList = ({ data }: FilmListProps) => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-
+  const {
+    currentPage,
+    setCurrentPage,
+    countTotalPages,
+    totalPages,
+    paginateData,
+    setPageData,
+  } = usePagination({
+    data,
+    itemsPerPage: ITEMS_PER_PAGE,
+  });
   const [filmsData, setFilmsData] = useState<FilmsData>(data);
   const searchParams = useSearchParams();
-
-  const countTotalPages = (targetData: FilmsData) => {
-    return Math.ceil(targetData.length / ITEMS_PER_PAGE);
-  };
-
-  const paginateData = (page: number) => {
-    return data.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
-  };
 
   const filterFilms = (name: string) => {
     const filteredFilms = data.filter((film) =>
@@ -56,25 +57,23 @@ const FilmsList = ({ data }: FilmListProps) => {
   const handlePageChange = (page: number) => {
     const pageData = paginateData(page);
     setFilmsData(pageData);
-
     setCurrentPage(page);
   };
 
   const handleSearch = (name: string) => {
     const filteredFilms = filterFilms(name);
     setFilmsData(filteredFilms);
-
+    setPageData(filteredFilms);
     const totalPages = countTotalPages(filteredFilms);
-    setTotalPages(totalPages);
 
     if (totalPages === 1) {
       setCurrentPage(1);
+      return;
     }
   };
 
   const initFilmsData = () => {
-    const totalPages = countTotalPages(data);
-    setTotalPages(totalPages);
+    setPageData(data);
 
     const pageData = paginateData(currentPage);
     setFilmsData(pageData);
