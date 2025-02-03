@@ -4,6 +4,7 @@ import { Dialog, DialogPanel, PopoverGroup } from "@headlessui/react";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import SearchBar from "../SearchBar";
 
 const navigation = {
   home: { name: "Home", href: "/" },
@@ -72,10 +73,8 @@ export default function MenuBar() {
             Characters
           </Link>
         </PopoverGroup>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <Link href="#" className="text-sm/6 font-semibold text-white">
-            Log in <span aria-hidden="true">&rarr;</span>
-          </Link>
+        <div className="hidden md:ml-24 lg:flex lg:flex-1 lg:justify-end">
+          <SearchBar placeholder="Search for a StarWars film or character" />
         </div>
       </nav>
       {/** Mobile Menu */}
@@ -129,12 +128,7 @@ export default function MenuBar() {
                 </a>
               </div>
               <div className="py-6">
-                <a
-                  href="#"
-                  className="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-50"
-                >
-                  Log in
-                </a>
+                <SearchBar placeholder="Search for a StarWars film or character" />
               </div>
             </div>
           </div>
