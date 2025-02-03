@@ -5,9 +5,10 @@ type MovieCardProps = {
   href: string;
   alt: string;
   linkTo: string;
+  classNames?: string;
 };
 
-const Cover = ({ href, alt, linkTo }: MovieCardProps) => {
+const Cover = ({ href, alt, linkTo, classNames }: MovieCardProps) => {
   return (
     <Link href={linkTo} key={href}>
       <div
@@ -15,7 +16,7 @@ const Cover = ({ href, alt, linkTo }: MovieCardProps) => {
     hover:scale-110 active:scale-95 cursor-pointer"
       >
         <Image
-          className="h-120 w-full object-cover"
+          className={classNames || "h-120 w-full object-cover"}
           src={href}
           width={250}
           alt={alt}
