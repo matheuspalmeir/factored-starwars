@@ -4,7 +4,7 @@ const FILM_COVERS_FILE_NAMES = new Set([
   "a-new-hope.jpg",
   "return-of-the-jedi.jpg",
   "the-phantom-menace.jpg",
-  "the-empire-strikes-back.webp",
+  "the-empire-strikes-back.jpg",
   "attack-of-the-clones.jpg",
   "revenge-of-the-sith.jpg",
 ]);
