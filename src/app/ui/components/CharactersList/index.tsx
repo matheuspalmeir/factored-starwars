@@ -1,11 +1,21 @@
-import { formatKey, formatToSlug } from "@/components/app/lib/utils";
-import ListHeader from "../ListHeader";
+"use client";
+import { useState } from "react";
+
 import Row from "../Row";
 import Cover from "../Cover";
+import ListHeader from "../ListHeader";
+import Pagination from "../Pagination";
+
+import {
+  DEFAULT_LIMIT_PAGE,
+  getSwapiCharacters,
+} from "@/components/app/characters/page";
 import { Character, CharactersData } from "./types";
+import { formatKey, formatToSlug } from "@/components/app/lib/utils";
+import Loading from "../Loading";
 
 interface CharacterListProps {
-  data: CharactersData;
+  initialData: CharactersData;
 }
 
 const characterListRows = (character: Character) => {
@@ -22,10 +32,28 @@ const characterListRows = (character: Character) => {
     });
 };
 
-const CharactersList = ({ data }: CharacterListProps) => {
+const CharactersList = ({ initialData }: CharacterListProps) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [data, setData] = useState<CharactersData>(initialData);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const totalPages = Math.ceil(totalRecords / DEFAULT_LIMIT_PAGE);
+
+  const handlePageChange = async (page: number) => {
+    setIsLoading(true);
+    setCurrentPage(page);
+    const fetchedData = await getSwapiCharacters(page);
+
+    setTotalRecords(fetchedData.totalRecords);
+    setData(fetchedData);
+    setIsLoading(false);
+  };
+
   return (
     <>
-      {data.map((character: Character) => {
+      {isLoading && <Loading />}
+      {data.characters.map((character: Character) => {
         return (
           <div
             key={`list-${character.uid}`}
@@ -52,7 +80,14 @@ const CharactersList = ({ data }: CharacterListProps) => {
           </div>
         );
       })}
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        isDynamic={true}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };
+
 export default CharactersList;

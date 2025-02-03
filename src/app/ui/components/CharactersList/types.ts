@@ -4,4 +4,7 @@ export type Character = {
   url: string;
 };
 
-export type CharactersData = Array<Character>;
+export type CharactersData = {
+  characters: Character[];
+  totalRecords: number;
+};

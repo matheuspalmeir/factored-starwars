@@ -5,28 +5,33 @@ import {
   CharactersData,
 } from "../ui/components/CharactersList/types";
 
+const parseCharactersData = (characters: CharactersResponse): Character[] => {
+  return characters.results.map((c) => ({
+    uid: c.uid,
+    name: c.name,
+    url: c.url,
+  }));
+};
+
+export const DEFAULT_LIMIT_PAGE = 10;
+
+export const getSwapiCharacters = async (
+  page: number
+): Promise<CharactersData> => {
+  const res = await fetch(
+    `http://localhost:3000/api/swapi/characters?page=${page}&limit=${DEFAULT_LIMIT_PAGE}`
+  );
+  const characters = (await res.json()) as CharactersResponse;
+  const parsedData = parseCharactersData(characters);
+  return { characters: parsedData, totalRecords: characters.total_records };
+};
+
 export default async function Characters() {
-  const parseCharactersData = (
-    characters: CharactersResponse
-  ): CharactersData => {
-    return characters.results.map((c) => ({
-      uid: c.uid,
-      name: c.name,
-      url: c.url,
-    }));
-  };
-
-  const getSwapiCharacters = async (): Promise<Character[]> => {
-    const res = await fetch("http://localhost:3000/api/swapi/characters");
-    const data = (await res.json()) as CharactersResponse;
-    return parseCharactersData(data);
-  };
-
-  const data = await getSwapiCharacters();
+  const initialData = await getSwapiCharacters(1);
 
   return (
     <div className="min-h-screen mx-auto max-w-7xl p-4 sm:px-6 lg:px-8">
-      <CharactersList data={data} />
+      <CharactersList initialData={initialData} />
     </div>
   );
 }
