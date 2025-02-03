@@ -1,6 +1,6 @@
 interface TableHeaderProps {
   title: string;
-  description: string;
+  description?: string;
 }
 
 const ListHeader = ({ title, description }: TableHeaderProps) => {

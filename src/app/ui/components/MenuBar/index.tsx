@@ -73,7 +73,7 @@ export default function MenuBar() {
             Characters
           </Link>
         </PopoverGroup>
-        <div className="hidden md:ml-24 lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden md:ml-12 lg:flex lg:flex-1 lg:justify-end">
           <SearchBar placeholder="Search for a StarWars film or character" />
         </div>
       </nav>

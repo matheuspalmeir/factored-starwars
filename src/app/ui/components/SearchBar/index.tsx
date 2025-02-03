@@ -8,7 +8,7 @@ interface SearchBarProps {
 
 const SearchBar = ({ placeholder }: SearchBarProps) => {
   return (
-    <div className="flex flex-row justify-center items-end w-full bg-black p-2">
+    <div className="flex flex-row justify-center items-end w-full bg-black">
       <Field className={"w-80 px-4"}>
         <Input
           placeholder={placeholder}
@@ -18,8 +18,15 @@ const SearchBar = ({ placeholder }: SearchBarProps) => {
         />
       </Field>
       <SearchButton
+        label="Search Films"
         handleOnClick={() => {
-          console.log("Search");
+          console.log("Films");
+        }}
+      />
+      <SearchButton
+        label="Search Characters"
+        handleOnClick={() => {
+          console.log("Characters");
         }}
       />
     </div>
