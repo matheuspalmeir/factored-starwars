@@ -26,6 +26,7 @@ export default function Pagination({
         <button
           key={index}
           onClick={() => onPageChange(index + 1)}
+          disabled={totalPages === 1}
           className={`px-4 py-2 border rounded-md text-white ${
             currentPage === index + 1 ? "bg-yellow-300" : ""
           }`}

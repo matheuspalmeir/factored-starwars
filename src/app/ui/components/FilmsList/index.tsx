@@ -16,35 +16,22 @@ interface FilmListProps {
   data: FilmsData;
 }
 
-const FilmListRows = (film: Film) => {
-  return Object.keys(film)
-    .filter((k) => k !== "openingCrawl")
-    .map((key: string) => {
-      return (
-        <Row
-          key={`row-${key}`}
-          title={formatKey(key)}
-          data={film[key as keyof Film]}
-        />
-      );
-    });
-};
-
 const ITEMS_PER_PAGE = 2;
 
 const FilmsList = ({ data }: FilmListProps) => {
   const {
     currentPage,
     setCurrentPage,
-    countTotalPages,
     totalPages,
     paginateData,
     setPageData,
+    setTotalPages,
   } = usePagination({
     data,
     itemsPerPage: ITEMS_PER_PAGE,
   });
-  const [filmsData, setFilmsData] = useState<FilmsData>(data);
+
+  const [displayedFilms, setDisplayedFilms] = useState<FilmsData>([]);
   const searchParams = useSearchParams();
 
   const filterFilms = (name: string) => {
@@ -55,32 +42,51 @@ const FilmsList = ({ data }: FilmListProps) => {
   };
 
   const handlePageChange = (page: number) => {
-    const pageData = paginateData(page);
-    setFilmsData(pageData);
+    const displayData = paginateData(page);
+    setDisplayedFilms(displayData);
     setCurrentPage(page);
   };
 
   const handleSearch = (name: string) => {
     const filteredFilms = filterFilms(name);
-    setFilmsData(filteredFilms);
-    setPageData(filteredFilms);
-    const totalPages = countTotalPages(filteredFilms);
 
-    if (totalPages === 1) {
-      setCurrentPage(1);
-      return;
+    if (filteredFilms.length === 1) {
+      setDisplayedFilms(filteredFilms);
+      setTotalPages(1);
+    }
+
+    if (filteredFilms.length > 1) {
+      setPageData(filteredFilms);
+      setDisplayedFilms(paginateData(1, filteredFilms));
+    }
+
+    setCurrentPage(1);
+  };
+
+  const FilmListRows = (film: Film) => {
+    return Object.keys(film)
+      .filter((k) => k !== "openingCrawl")
+      .map((key: string) => {
+        return (
+          <Row
+            key={`row-${key}`}
+            title={formatKey(key)}
+            data={film[key as keyof Film]}
+          />
+        );
+      });
+  };
+
+  const initializeData = () => {
+    if (data) {
+      const displayData = paginateData(currentPage, data);
+      setDisplayedFilms(displayData);
+      setPageData(data);
     }
   };
 
-  const initFilmsData = () => {
-    setPageData(data);
-
-    const pageData = paginateData(currentPage);
-    setFilmsData(pageData);
-  };
-
   useEffect(() => {
-    initFilmsData();
+    initializeData();
   }, []);
 
   useEffect(() => {
@@ -91,12 +97,12 @@ const FilmsList = ({ data }: FilmListProps) => {
       return;
     }
 
-    initFilmsData();
+    initializeData();
   }, [searchParams]);
 
   return (
     <>
-      {filmsData.map((film: Film) => {
+      {displayedFilms.map((film: Film) => {
         return (
           <div
             key={`list-${film.episodeId}`}
