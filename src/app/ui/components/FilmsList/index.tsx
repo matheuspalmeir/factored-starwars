@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Row from "../Row";
 import Cover from "../Cover";
@@ -9,6 +9,7 @@ import Pagination from "../Pagination";
 import { Film, FilmsData } from "./types";
 
 import { formatKey, formatToSlug } from "@/components/app/lib/utils";
+import { useSearchParams } from "next/navigation";
 
 interface FilmListProps {
   data: FilmsData;
@@ -32,22 +33,71 @@ const ITEMS_PER_PAGE = 2;
 
 const FilmsList = ({ data }: FilmListProps) => {
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
-  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
-  const paginatedData = data.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  const [filmsData, setFilmsData] = useState<FilmsData>(data);
+  const searchParams = useSearchParams();
 
-  data = paginatedData;
+  const countTotalPages = (targetData: FilmsData) => {
+    return Math.ceil(targetData.length / ITEMS_PER_PAGE);
+  };
+
+  const paginateData = (page: number) => {
+    return data.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE);
+  };
+
+  const filterFilms = (name: string) => {
+    const filteredFilms = data.filter((film) =>
+      film.title.toLowerCase().includes(name.toLowerCase())
+    );
+    return filteredFilms;
+  };
 
   const handlePageChange = (page: number) => {
+    const pageData = paginateData(page);
+    setFilmsData(pageData);
+
     setCurrentPage(page);
   };
 
+  const handleSearch = (name: string) => {
+    const filteredFilms = filterFilms(name);
+    setFilmsData(filteredFilms);
+
+    const totalPages = countTotalPages(filteredFilms);
+    setTotalPages(totalPages);
+
+    if (totalPages === 1) {
+      setCurrentPage(1);
+    }
+  };
+
+  const initFilmsData = () => {
+    const totalPages = countTotalPages(data);
+    setTotalPages(totalPages);
+
+    const pageData = paginateData(currentPage);
+    setFilmsData(pageData);
+  };
+
+  useEffect(() => {
+    initFilmsData();
+  }, []);
+
+  useEffect(() => {
+    const queryName = searchParams.get("query") || "";
+
+    if (queryName !== "") {
+      handleSearch(queryName);
+      return;
+    }
+
+    initFilmsData();
+  }, [searchParams]);
+
   return (
     <>
-      {data.map((film: Film) => {
+      {filmsData.map((film: Film) => {
         return (
           <div
             key={`list-${film.episodeId}`}

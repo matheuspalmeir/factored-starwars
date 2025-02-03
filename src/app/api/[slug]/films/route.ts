@@ -1,7 +1,3 @@
-type FilmsGetParams = {
-  slug: string;
-};
-
 export async function GET(
   request: Request,
   context: { params: { slug: string } }

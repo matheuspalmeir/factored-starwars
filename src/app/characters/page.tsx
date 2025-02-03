@@ -1,4 +1,5 @@
 import { CharactersResponse } from "../lib/types";
+import { parseApiData } from "../lib/utils";
 import CharactersList from "../ui/components/CharactersList";
 import {
   Character,
@@ -6,11 +7,9 @@ import {
 } from "../ui/components/CharactersList/types";
 
 const parseCharactersData = (characters: CharactersResponse): Character[] => {
-  return characters.results.map((c) => ({
-    uid: c.uid,
-    name: c.name,
-    url: c.url,
-  }));
+  return characters.results.map((character) =>
+    parseApiData<Character>(character)
+  );
 };
 
 export const DEFAULT_LIMIT_PAGE = 10;

@@ -1,4 +1,7 @@
 "use client";
+
+import { useEffect } from "react";
+
 type PaginationProps = {
   currentPage: number;
   totalPages: number;
@@ -36,7 +39,7 @@ export default function Pagination({
 
       <button
         onClick={() => onPageChange(currentPage + 1)}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages || totalPages === 0}
         className="px-4 py-2 border text-white rounded-md disabled:opacity-50"
       >
         Next
