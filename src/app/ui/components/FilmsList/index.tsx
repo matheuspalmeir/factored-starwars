@@ -1,8 +1,14 @@
-import { formatKey, formatToSlug } from "@/components/app/lib/utils";
-import ListHeader from "../ListHeader";
+"use client";
+import { useState } from "react";
+
 import Row from "../Row";
 import Cover from "../Cover";
+import ListHeader from "../ListHeader";
+import Pagination from "../Pagination";
+
 import { Film, FilmsData } from "./types";
+
+import { formatKey, formatToSlug } from "@/components/app/lib/utils";
 
 interface FilmListProps {
   data: FilmsData;
@@ -22,7 +28,23 @@ const FilmListRows = (film: Film) => {
     });
 };
 
+const ITEMS_PER_PAGE = 2;
+
 const FilmsList = ({ data }: FilmListProps) => {
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const totalPages = Math.ceil(data.length / ITEMS_PER_PAGE);
+  const paginatedData = data.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
+  data = paginatedData;
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <>
       {data.map((film: Film) => {
@@ -52,6 +74,12 @@ const FilmsList = ({ data }: FilmListProps) => {
           </div>
         );
       })}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
+      />
     </>
   );
 };

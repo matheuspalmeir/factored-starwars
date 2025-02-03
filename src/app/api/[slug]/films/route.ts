@@ -1,6 +1,10 @@
+type FilmsGetParams = {
+  slug: string;
+};
+
 export async function GET(
   request: Request,
-  { params }: { params: { slug: string } }
+  { params }: { params: FilmsGetParams }
 ) {
   const slug = params.slug;
 
